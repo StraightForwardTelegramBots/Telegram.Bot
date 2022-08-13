@@ -12,6 +12,7 @@ using Telegram.Bot.Extensions;
 using Telegram.Bot.Requests;
 using Telegram.Bot.Requests.Abstractions;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot;
 
@@ -27,6 +28,9 @@ public class TelegramBotClient : ITelegramBotClient
 
     /// <inheritdoc/>
     public long? BotId => _options.BotId;
+
+    /// <inheritdoc/>
+    public ClientDefaults ClientDefaults { get; }
 
     /// <inheritdoc />
     public bool LocalBotServer => _options.LocalBotServer;
@@ -58,15 +62,18 @@ public class TelegramBotClient : ITelegramBotClient
     /// </summary>
     /// <param name="options">Configuration for <see cref="TelegramBotClient" /></param>
     /// <param name="httpClient">A custom <see cref="HttpClient"/></param>
+    /// <param name="clientDefaults">A set of default values to be used where ever their're not specified.</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="options"/> is <c>null</c>
     /// </exception>
     public TelegramBotClient(
         TelegramBotClientOptions options,
-        HttpClient? httpClient = default)
+        HttpClient? httpClient = default,
+        ClientDefaults clientDefaults = default)
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _httpClient = httpClient ?? new HttpClient();
+        ClientDefaults = clientDefaults;
     }
 
     /// <summary>
@@ -74,13 +81,15 @@ public class TelegramBotClient : ITelegramBotClient
     /// </summary>
     /// <param name="token"></param>
     /// <param name="httpClient">A custom <see cref="HttpClient"/></param>
+    /// <param name="clientDefaults">A set of default values to be used where ever their're not specified.</param>
     /// <exception cref="ArgumentException">
     /// Thrown if <paramref name="token"/> format is invalid
     /// </exception>
     public TelegramBotClient(
         string token,
-        HttpClient? httpClient = null) :
-        this(new TelegramBotClientOptions(token), httpClient)
+        HttpClient? httpClient = null,
+        ClientDefaults clientDefaults = default) :
+        this(new TelegramBotClientOptions(token), httpClient, clientDefaults)
     { }
 
     /// <inheritdoc />
@@ -156,6 +165,7 @@ public class TelegramBotClient : ITelegramBotClient
             )
             .ConfigureAwait(false);
 
+        apiResponse.Result!.CallCustomSetter(this);
         return apiResponse.Result!;
 
         [MethodImpl(methodImplOptions: MethodImplOptions.AggressiveInlining)]

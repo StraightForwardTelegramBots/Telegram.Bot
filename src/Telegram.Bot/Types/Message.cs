@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Passport;
 using Telegram.Bot.Types.Payments;
@@ -15,8 +17,45 @@ namespace Telegram.Bot.Types;
 /// This object represents a message.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class Message
+public class Message: IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        From?.CallCustomSetter(client);
+        SenderChat?.CallCustomSetter(client);
+        Chat.CallCustomSetter(client);
+        ForwardFrom?.CallCustomSetter(client);
+        ForwardFromChat?.CallCustomSetter(client);
+        ReplyToMessage?.CallCustomSetter(client);
+        ViaBot?.CallCustomSetter(client);
+        if (NewChatMembers is not null)
+        {
+            foreach (var member in NewChatMembers)
+            {
+                member.CallCustomSetter(client);
+            }
+        }
+        LeftChatMember?.CallCustomSetter(client);
+        PinnedMessage?.CallCustomSetter(client);
+        if (Entities is not null)
+        {
+            foreach (var entity in Entities)
+            {
+                entity.CallCustomSetter(client);
+            }
+        }
+        if (CaptionEntities is not null)
+        {
+            foreach (var entity in CaptionEntities)
+            {
+                entity.CallCustomSetter(client);
+            }
+        }
+    }
+
     /// <summary>
     /// Unique message identifier inside this chat
     /// </summary>
@@ -465,4 +504,26 @@ public class Message
             { WebAppData: { } }                    => MessageType.WebAppData,
             _                                      => MessageType.Unknown
         };
+
+
+
+    #region Extension Properties
+
+    /// <summary>
+    /// If it's a text message.
+    /// </summary>
+    [MemberNotNullWhen(true, "Text")]
+    public bool IsText => Type == MessageType.Text;
+
+    /// <summary>
+    /// The id of conversation the message belongs to.
+    /// </summary>
+    public long ChatId => Chat.Id;
+
+    /// <summary>
+    /// Optional, The id of the sender of the message.
+    /// </summary>
+    public long? FromId => From?.Id;
+
+    #endregion
 }

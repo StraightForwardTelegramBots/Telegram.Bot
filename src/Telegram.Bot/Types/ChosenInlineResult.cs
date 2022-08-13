@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -8,8 +9,16 @@ namespace Telegram.Bot.Types;
 /// and sent to their chat partner.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class ChosenInlineResult
+public class ChosenInlineResult : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        From.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// The unique identifier for the result that was chosen.
     /// </summary>

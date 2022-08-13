@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -59,7 +59,7 @@ public static partial class TelegramBotClientExtensions
     public static void StartReceiving(
         this ITelegramBotClient botClient,
         Func<ITelegramBotClient, Update, CancellationToken, Task> updateHandler,
-        Func<ITelegramBotClient, Exception, CancellationToken, Task> pollingErrorHandler,
+        Func<ITelegramBotClient, Exception, CancellationToken, Task>? pollingErrorHandler = default,
         ReceiverOptions? receiverOptions = default,
         CancellationToken cancellationToken = default
     ) =>
@@ -227,7 +227,7 @@ public static partial class TelegramBotClientExtensions
     public static async Task ReceiveAsync(
         this ITelegramBotClient botClient,
         Func<ITelegramBotClient, Update, CancellationToken, Task> updateHandler,
-        Func<ITelegramBotClient, Exception, CancellationToken, Task> pollingErrorHandler,
+        Func<ITelegramBotClient, Exception, CancellationToken, Task>? pollingErrorHandler = default,
         ReceiverOptions? receiverOptions = default,
         CancellationToken cancellationToken = default
     ) =>

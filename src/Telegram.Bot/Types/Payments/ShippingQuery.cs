@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types.Payments;
 
@@ -7,8 +8,16 @@ namespace Telegram.Bot.Types.Payments;
 /// This object contains information about an incoming shipping query.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class ShippingQuery
+public class ShippingQuery : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        From.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// Unique query identifier
     /// </summary>

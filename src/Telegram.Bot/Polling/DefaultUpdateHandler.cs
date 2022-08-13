@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -15,6 +15,15 @@ public class DefaultUpdateHandler : IUpdateHandler
     readonly Func<ITelegramBotClient, Update, CancellationToken, Task> _updateHandler;
     readonly Func<ITelegramBotClient, Exception, CancellationToken, Task> _pollingErrorHandler;
 
+    private Task DefaultErrorHandlerAsync(
+        ITelegramBotClient _,
+        Exception exception,
+        CancellationToken __)
+    {
+        Console.WriteLine(exception);
+        return Task.CompletedTask;
+    }
+
     /// <summary>
     /// Constructs a new <see cref="DefaultUpdateHandler"/> with the specified callback functions
     /// </summary>
@@ -22,10 +31,10 @@ public class DefaultUpdateHandler : IUpdateHandler
     /// <param name="pollingErrorHandler">The function to invoke when an error occurs</param>
     public DefaultUpdateHandler(
         Func<ITelegramBotClient, Update, CancellationToken, Task> updateHandler,
-        Func<ITelegramBotClient, Exception, CancellationToken, Task> pollingErrorHandler)
+        Func<ITelegramBotClient, Exception, CancellationToken, Task>? pollingErrorHandler = default)
     {
         _updateHandler = updateHandler ?? throw new ArgumentNullException(nameof(updateHandler));
-        _pollingErrorHandler = pollingErrorHandler ?? throw new ArgumentNullException(nameof(pollingErrorHandler));
+        _pollingErrorHandler = pollingErrorHandler ?? DefaultErrorHandlerAsync;
     }
 
     /// <inheritdoc />

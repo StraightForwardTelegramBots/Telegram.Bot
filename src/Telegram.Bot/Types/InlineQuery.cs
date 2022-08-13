@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 using static Telegram.Bot.Types.Enums.ChatType;
 
@@ -10,8 +11,16 @@ namespace Telegram.Bot.Types;
 /// some default or trending results.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class InlineQuery
+public class InlineQuery : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        From.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// Unique identifier for this query
     /// </summary>

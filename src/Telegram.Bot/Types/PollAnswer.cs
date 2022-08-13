@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -7,8 +8,16 @@ namespace Telegram.Bot.Types;
 /// This object represents an answer of a user in a non-anonymous poll.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class PollAnswer
+public class PollAnswer : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        User.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// Unique poll identifier
     /// </summary>

@@ -223,7 +223,7 @@ public static partial class TelegramBotClientExtensions
     /// A cancellation token that can be used by other objects or threads to receive notice of cancellation
     /// </param>
     /// <returns>Returns basic information about the bot in form of a <see cref="User"/> object.</returns>
-    public static async Task<User> GetMeAsync(
+    public static async Task<User> GetMeAsync( // TODO: make this cached
         this ITelegramBotClient botClient,
         CancellationToken cancellationToken = default
     ) =>
@@ -321,13 +321,13 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new SendMessageRequest(chatId, text)
                 {
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     Entities = entities,
-                    DisableWebPagePreview = disableWebPagePreview,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableWebPagePreview = disableWebPagePreview ?? botClient.ClientDefaults.DisableWebPagePreview,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -368,8 +368,8 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new ForwardMessageRequest(chatId, fromChatId, messageId)
                 {
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                 },
                 cancellationToken
             )
@@ -440,12 +440,12 @@ public static partial class TelegramBotClientExtensions
                 request: new CopyMessageRequest(chatId, fromChatId, messageId)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     ReplyToMessageId = replyToMessageId,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -516,12 +516,12 @@ public static partial class TelegramBotClientExtensions
                 request: new SendPhotoRequest(chatId, photo)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -604,16 +604,16 @@ public static partial class TelegramBotClientExtensions
                 request: new SendAudioRequest(chatId, audio)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     Duration = duration,
                     Performer = performer,
                     Title = title,
                     Thumb = thumb,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -697,13 +697,13 @@ public static partial class TelegramBotClientExtensions
                 {
                     Thumb = thumb,
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     DisableContentTypeDetection = disableContentTypeDetection,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -794,13 +794,13 @@ public static partial class TelegramBotClientExtensions
                     Height = height,
                     Thumb = thumb,
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     SupportsStreaming = supportsStreaming,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -889,12 +889,12 @@ public static partial class TelegramBotClientExtensions
                     Height = height,
                     Thumb = thumb,
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup,
                 },
                 cancellationToken
@@ -966,13 +966,13 @@ public static partial class TelegramBotClientExtensions
                 request: new SendVoiceRequest(chatId, voice)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     Duration = duration,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -1041,10 +1041,10 @@ public static partial class TelegramBotClientExtensions
                     Duration = duration,
                     Length = length,
                     Thumb = thumb,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -1087,10 +1087,10 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new SendMediaGroupRequest(chatId, media)
                 {
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                 },
                 cancellationToken
             )
@@ -1157,10 +1157,10 @@ public static partial class TelegramBotClientExtensions
                     LivePeriod = livePeriod,
                     Heading = heading,
                     ProximityAlertRadius = proximityAlertRadius,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup,
                 },
                 cancellationToken
@@ -1412,10 +1412,10 @@ public static partial class TelegramBotClientExtensions
                     FoursquareType = foursquareType,
                     GooglePlaceId = googlePlaceId,
                     GooglePlaceType = googlePlaceType,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -1472,10 +1472,10 @@ public static partial class TelegramBotClientExtensions
                 {
                     LastName = lastName,
                     Vcard = vCard,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -1582,10 +1582,10 @@ public static partial class TelegramBotClientExtensions
                     OpenPeriod = openPeriod,
                     CloseDate = closeDate,
                     IsClosed = isClosed,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -1642,10 +1642,10 @@ public static partial class TelegramBotClientExtensions
                 request: new SendDiceRequest(chatId)
                 {
                     Emoji = emoji,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup,
                 },
                 cancellationToken
@@ -1740,7 +1740,7 @@ public static partial class TelegramBotClientExtensions
     /// </summary>
     /// <remarks>
     /// You can use <see cref="ITelegramBotClient.DownloadFileAsync"/> or
-    /// <see cref="TelegramBotClientExtensions.GetInfoAndDownloadFileAsync"/> methods to download the file
+    /// <see cref="GetInfoAndDownloadFileAsync"/> methods to download the file
     /// </remarks>
     /// <param name="botClient">An instance of <see cref="ITelegramBotClient"/></param>
     /// <param name="fileId">File identifier to get info about</param>
@@ -3024,9 +3024,9 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new EditMessageTextRequest(chatId, messageId, text)
                 {
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     Entities = entities,
-                    DisableWebPagePreview = disableWebPagePreview,
+                    DisableWebPagePreview = disableWebPagePreview ?? botClient.ClientDefaults.DisableWebPagePreview,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -3072,9 +3072,9 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new EditInlineMessageTextRequest(inlineMessageId, text)
                 {
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     Entities = entities,
-                    DisableWebPagePreview = disableWebPagePreview,
+                    DisableWebPagePreview = disableWebPagePreview ?? botClient.ClientDefaults.DisableWebPagePreview,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -3125,7 +3125,7 @@ public static partial class TelegramBotClientExtensions
                 request: new EditMessageCaptionRequest(chatId, messageId)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     ReplyMarkup = replyMarkup
                 },
@@ -3171,7 +3171,7 @@ public static partial class TelegramBotClientExtensions
                 request: new EditInlineMessageCaptionRequest(inlineMessageId)
                 {
                     Caption = caption,
-                    ParseMode = parseMode,
+                    ParseMode = parseMode ?? botClient.ClientDefaults.ParseMode,
                     CaptionEntities = captionEntities,
                     ReplyMarkup = replyMarkup
                 },
@@ -3440,10 +3440,10 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new SendStickerRequest(chatId, sticker)
                 {
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -4044,10 +4044,10 @@ public static partial class TelegramBotClientExtensions
                     SendPhoneNumberToProvider = sendPhoneNumberToProvider,
                     SendEmailToProvider = sendEmailToProvider,
                     IsFlexible = isFlexible,
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken
@@ -4205,10 +4205,10 @@ public static partial class TelegramBotClientExtensions
             .MakeRequestAsync(
                 request: new SendGameRequest(chatId, gameShortName)
                 {
-                    DisableNotification = disableNotification,
-                    ProtectContent = protectContent,
+                    DisableNotification = disableNotification ?? botClient.ClientDefaults.DisableNotification,
+                    ProtectContent = protectContent ?? botClient.ClientDefaults.ProtectContent,
                     ReplyToMessageId = replyToMessageId,
-                    AllowSendingWithoutReply = allowSendingWithoutReply,
+                    AllowSendingWithoutReply = allowSendingWithoutReply ?? botClient.ClientDefaults.AllowSendingWithoutReply,
                     ReplyMarkup = replyMarkup
                 },
                 cancellationToken

@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -9,8 +10,22 @@ namespace Telegram.Bot.Types;
 /// This object contains information about a poll.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class Poll
+public class Poll : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        if (ExplanationEntities is not null)
+        {
+            foreach (var entity in ExplanationEntities)
+            {
+                entity.CallCustomSetter(client);
+            }
+        }
+    }
+
     /// <summary>
     /// Unique poll identifier
     /// </summary>

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Types;
@@ -8,8 +9,16 @@ namespace Telegram.Bot.Types;
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class MessageEntity
+public class MessageEntity : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        User?.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// Type of the entity
     /// </summary>

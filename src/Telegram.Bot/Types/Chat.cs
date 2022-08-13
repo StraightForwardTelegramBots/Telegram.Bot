@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Diagnostics.CodeAnalysis;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Types;
@@ -8,8 +10,15 @@ namespace Telegram.Bot.Types;
 /// This object represents a chat.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class Chat
+public class Chat : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+    }
+
     /// <summary>
     /// Unique identifier for this chat. This number may have more
     /// than 32 significant bits and some programming languages may have
@@ -149,4 +158,29 @@ public class Chat
     /// </summary>
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public ChatLocation? Location { get; set; }
+
+
+    #region Extension Properties
+
+    /// <summary>
+    /// If this chat is a <see cref="ChatType.Private"/> chat.
+    /// </summary>
+    [MemberNotNullWhen(true, "FirstName")]
+    [MemberNotNullWhen(false, "Title")]
+    public bool IsPrivate => Type == ChatType.Private;
+
+    /// <summary>
+    /// If this chat is a <see cref="ChatType.Group"/> or <see cref="ChatType.Supergroup"/> chat.
+    /// </summary>
+    [MemberNotNullWhen(true, "Title")]
+    [MemberNotNullWhen(false, "FirstName")]
+    public bool IsAnyKindOfGroup => Type == ChatType.Group || Type == ChatType.Supergroup;
+
+    /// <summary>
+    /// Gets the disply name of the chat, <see cref="Title"/> if it's group or channel
+    /// and <see cref="FirstName"/> + <see cref="LastName"/> if it's private chat.
+    /// </summary>
+    public string DisplayName => IsPrivate? $"{FirstName} {LastName}": Title;
+
+    #endregion
 }

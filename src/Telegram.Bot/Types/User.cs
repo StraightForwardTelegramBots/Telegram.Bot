@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -7,8 +8,15 @@ namespace Telegram.Bot.Types;
 /// This object represents a Telegram user or bot.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class User
+public class User : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+    }
+
     /// <summary>
     /// Unique identifier for this user or bot
     /// </summary>
@@ -67,4 +75,14 @@ public class User
     /// <inheritdoc/>
     public override string ToString() =>
         $"{(Username is null ? $"{FirstName}{LastName?.Insert(0, " ")}" : $"@{Username}")} ({Id})";
+
+    #region Extension Properties
+
+    /// <summary>
+    /// The full name of the user.
+    /// </summary>
+    public string FullName => $"{FirstName} {LastName}";
+
+    #endregion
+
 }

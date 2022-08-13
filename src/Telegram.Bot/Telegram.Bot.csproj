@@ -8,17 +8,17 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <Title>Telegram Bot API Client</Title>
+    <Title>StraightForward Telegram Bot API Client</Title>
     <Description>
       The Bot API is an HTTP-based interface created for developers keen on building bots for Telegram.
     </Description>
-    <PackageId>Telegram.Bot</PackageId>
-    <Authors>RoundRobin,Poulad,tuscen</Authors>
-    <Copyright>Copyright © Robin Müller 2016</Copyright>
+    <PackageId>StraightForward.Telegram.Bot</PackageId>
+    <Authors>RoundRobin,Poulad,tuscen,immmdreza</Authors>
+    <Copyright>Copyright © Immmdreza 2022</Copyright>
     <PackageIcon>package-icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/TelegramBots/telegram.bot</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/StraightForwardTelegramBots/Telegram.Bot</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/TelegramBots/telegram.bot.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/StraightForwardTelegramBots/Telegram.Bot.git</RepositoryUrl>
     <PackageTags>Telegram;Bot;Api;Payment;Inline;Games</PackageTags>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>
       $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb
@@ -74,8 +74,6 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" PrivateAssets="All" />
     <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" />
-    <ProjectReference Include="..\EnumSerializer.Generator\EnumSerializer.Generator.csproj"
-                      OutputItemType="Analyzer"
-                      ReferenceOutputAssembly="false"/>
+    <ProjectReference Include="..\EnumSerializer.Generator\EnumSerializer.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

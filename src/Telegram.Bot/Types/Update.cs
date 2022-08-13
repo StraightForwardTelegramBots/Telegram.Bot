@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Payments;
 namespace Telegram.Bot.Types;
@@ -11,8 +12,19 @@ namespace Telegram.Bot.Types;
 /// Only <b>one</b> of the optional parameters can be present in any given update.
 /// </remarks>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class Update
+public class Update: IClientCarrier
 {
+    private bool _orginalUpdateSet;
+    private object? _orginalUpdate;
+
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        this.OriginalUpdate?.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// The update's unique identifier. Update identifiers start from a certain positive number and increase
     /// sequentially. This ID becomes especially handy if you're using
@@ -136,4 +148,38 @@ public class Update
         { ChatJoinRequest: { } }    => UpdateType.ChatJoinRequest,
         _                           => UpdateType.Unknown
     };
+
+    /// <summary>
+    /// Gets a cached version of original update which can be Message, CallbackQuery or etc.
+    /// </summary>
+    public object? OriginalUpdate
+    {
+        get
+        {
+            if (!_orginalUpdateSet)
+            {
+                _orginalUpdate = this switch
+                {
+                    { Message: { } } => Message,
+                    { EditedMessage: { } } => EditedMessage,
+                    { InlineQuery: { } } => InlineQuery,
+                    { ChosenInlineResult: { } } => ChosenInlineResult,
+                    { CallbackQuery: { } } => CallbackQuery,
+                    { ChannelPost: { } } => ChannelPost,
+                    { EditedChannelPost: { } } => EditedChannelPost,
+                    { ShippingQuery: { } } => ShippingQuery,
+                    { PreCheckoutQuery: { } } => PreCheckoutQuery,
+                    { Poll: { } } => Poll,
+                    { PollAnswer: { } } => PollAnswer,
+                    { MyChatMember: { } } => MyChatMember,
+                    { ChatMember: { } } => ChatMember,
+                    { ChatJoinRequest: { } } => ChatJoinRequest,
+                    _ => null
+                };
+                _orginalUpdateSet = true;
+            }
+
+            return _orginalUpdate;
+        }
+    }
 }

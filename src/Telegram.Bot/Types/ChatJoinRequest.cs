@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -9,8 +10,18 @@ namespace Telegram.Bot.Types;
 /// Represents a join request sent to a chat.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class ChatJoinRequest
+public class ChatJoinRequest : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        From.CallCustomSetter(client);
+        Chat.CallCustomSetter(client);
+        InviteLink?.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// Chat to which the request was sent
     /// </summary>

@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Telegram.Bot.Converters;
+using Telegram.Bot.Types.Abstractions;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Types;
@@ -11,8 +12,16 @@ namespace Telegram.Bot.Types;
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 [JsonConverter(typeof(ChatMemberConverter))]
-public abstract class ChatMember
+public abstract class ChatMember : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        User.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// The member's status in the chat.
     /// </summary>

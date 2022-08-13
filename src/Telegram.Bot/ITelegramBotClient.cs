@@ -29,6 +29,11 @@ public interface ITelegramBotClient
     long? BotId { get; }
 
     /// <summary>
+    /// A set of default values to be used where ever their're not specified.
+    /// </summary>
+    ClientDefaults ClientDefaults { get; }
+
+    /// <summary>
     /// Timeout for requests
     /// </summary>
     TimeSpan Timeout { get; set; }

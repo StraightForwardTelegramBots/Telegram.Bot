@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Telegram.Bot.Types.Abstractions;
 
 namespace Telegram.Bot.Types;
 
@@ -9,8 +10,16 @@ namespace Telegram.Bot.Types;
 /// Represents an invite link for a chat.
 /// </summary>
 [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class ChatInviteLink
+public class ChatInviteLink : IClientCarrier
 {
+    ITelegramBotClient? IClientCarrier.Client { get; set; }
+
+    void IClientCarrier.CustomSetter(ITelegramBotClient client)
+    {
+        (this as IClientCarrier).Client = client;
+        Creator.CallCustomSetter(client);
+    }
+
     /// <summary>
     /// The invite link. If the link was created by another chat administrator, then the second part of the
     /// link will be replaced with “…”.
